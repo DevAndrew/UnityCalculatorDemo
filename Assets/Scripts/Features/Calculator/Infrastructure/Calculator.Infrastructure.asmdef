@@ -1,0 +1,17 @@
+{
+  "name": "Calculator.Infrastructure",
+  "rootNamespace": "DevAndrew.Calculator.Infrastructure",
+  "references": [
+    "Calculator.Core",
+    "SaveLoad.Contracts"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": true
+}

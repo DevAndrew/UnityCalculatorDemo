@@ -1,0 +1,22 @@
+{
+  "name": "App.Bootstrap",
+  "rootNamespace": "CalculatorDemoTask.App",
+  "references": [
+    "Calculator.Core",
+    "Calculator.Presentation",
+    "Calculator.Infrastructure",
+    "Dialogs.Presentation",
+    "Dialogs.Contracts",
+    "SaveLoad.Infrastructure",
+    "SaveLoad.Contracts"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}
