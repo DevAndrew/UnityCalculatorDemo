@@ -57,9 +57,14 @@ namespace DevAndrew.Calculator.Infrastructure
                 {
                     foreach (var item in state.History)
                     {
+                        if (item == null)
+                        {
+                            continue;
+                        }
+
                         dto.history.Add(new HistoryEntryDto
                         {
-                            expression = item.Expression,
+                            expression = item.Expression ?? string.Empty,
                             isError = item.IsError,
                             result = item.Result
                         });
@@ -79,6 +84,11 @@ namespace DevAndrew.Calculator.Infrastructure
                 {
                     foreach (var item in history)
                     {
+                        if (item == null)
+                        {
+                            continue;
+                        }
+
                         state.History.Add(new HistoryEntry
                         {
                             Expression = item.expression ?? string.Empty,
