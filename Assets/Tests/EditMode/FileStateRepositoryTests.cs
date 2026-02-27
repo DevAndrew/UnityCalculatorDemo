@@ -32,14 +32,9 @@ public class FileStateRepositoryTests
     public void SaveAndLoad_RoundTrip_Works()
     {
         var repository = CreateRepository();
-        var inputState = new CalculatorState
-        {
-            InputExpression = "54+21",
-            History = new List<HistoryEntry>
-            {
-                HistoryEntry.Success("54+21", 75)
-            }
-        };
+        var inputState = CalculatorState.CreateDefault();
+        inputState.TrySetInputExpression("54+21");
+        inputState.AddSuccessHistory("54+21", 75);
 
         var saveResult = repository.TrySave(inputState);
         var loadedState = repository.Load();
@@ -56,11 +51,9 @@ public class FileStateRepositoryTests
     public void Load_UsesBackup_WhenPrimaryFileIsCorrupted()
     {
         var repository = CreateRepository();
-        var state = new CalculatorState
-        {
-            InputExpression = "1+2",
-            History = new List<HistoryEntry> { HistoryEntry.Success("1+2", 3) }
-        };
+        var state = CalculatorState.CreateDefault();
+        state.TrySetInputExpression("1+2");
+        state.AddSuccessHistory("1+2", 3);
         repository.TrySave(state);
 
         var statePath = Path.Combine(_tempDirectory, "CalculatorState.json");

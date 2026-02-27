@@ -49,26 +49,23 @@ namespace DevAndrew.Calculator.Infrastructure
             {
                 var dto = new SaveStateDto
                 {
-                    inputExpression = state.InputExpression ?? string.Empty,
+                    inputExpression = state.InputExpression,
                     history = new List<HistoryEntryDto>()
                 };
 
-                if (state.History != null)
+                foreach (var item in state.History)
                 {
-                    foreach (var item in state.History)
+                    if (item == null)
                     {
-                        if (item == null)
-                        {
-                            continue;
-                        }
-
-                        dto.history.Add(new HistoryEntryDto
-                        {
-                            expression = item.Expression ?? string.Empty,
-                            isError = item.IsError,
-                            result = item.Result
-                        });
+                        continue;
                     }
+
+                    dto.history.Add(new HistoryEntryDto
+                    {
+                        expression = item.Expression,
+                        isError = item.IsError,
+                        result = item.Result
+                    });
                 }
 
                 return dto;
@@ -77,8 +74,7 @@ namespace DevAndrew.Calculator.Infrastructure
             public CalculatorState ToDomain()
             {
                 var state = CalculatorState.CreateDefault();
-                state.InputExpression = inputExpression ?? string.Empty;
-                state.History = new List<HistoryEntry>();
+                state.TrySetInputExpression(inputExpression);
 
                 if (history != null)
                 {
@@ -89,12 +85,10 @@ namespace DevAndrew.Calculator.Infrastructure
                             continue;
                         }
 
-                        state.History.Add(new HistoryEntry
-                        {
-                            Expression = item.expression ?? string.Empty,
-                            IsError = item.isError,
-                            Result = item.result
-                        });
+                        state.AddHistoryEntry(HistoryEntry.Restore(
+                            item.expression ?? string.Empty,
+                            item.isError,
+                            item.result));
                     }
                 }
 

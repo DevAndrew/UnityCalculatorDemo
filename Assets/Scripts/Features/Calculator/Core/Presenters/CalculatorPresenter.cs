@@ -32,12 +32,7 @@ namespace DevAndrew.Calculator.Core.Presenters
         public void Initialize()
         {
             _state = _stateRepository.Load() ?? CalculatorState.CreateDefault();
-            if (_state.History == null)
-            {
-                _state.History = new List<HistoryEntry>();
-            }
-
-            _view.SetInputText(_state.InputExpression ?? string.Empty);
+            _view.SetInputText(_state.InputExpression);
             RefreshHistoryOnView();
             _view.ResultClicked += OnResultClicked;
             _view.InputChanged += OnInputChanged;
@@ -76,14 +71,14 @@ namespace DevAndrew.Calculator.Core.Presenters
 
             if (ExpressionEvaluator.TryEvaluate(expressionAtClick, out var sum))
             {
-                _state.History.Add(HistoryEntry.Success(expressionAtClick, sum));
+                _state.AddSuccessHistory(expressionAtClick, sum);
                 _dirty = true;
                 RefreshHistoryOnView();
                 PersistIfNeeded();
                 return;
             }
 
-            _state.History.Add(HistoryEntry.Error(expressionAtClick));
+            _state.AddErrorHistory(expressionAtClick);
             _dirty = true;
             RefreshHistoryOnView();
             PersistIfNeeded();
@@ -116,12 +111,10 @@ namespace DevAndrew.Calculator.Core.Presenters
             }
 
             var currentInput = value ?? string.Empty;
-            if (string.Equals(_state.InputExpression, currentInput, StringComparison.Ordinal))
+            if (!_state.TrySetInputExpression(currentInput))
             {
                 return;
             }
-
-            _state.InputExpression = currentInput;
             _dirty = true;
         }
 
