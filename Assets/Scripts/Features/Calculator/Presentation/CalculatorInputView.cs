@@ -9,41 +9,41 @@ namespace DevAndrew.Calculator.Presentation
     {
         [SerializeField] private TMP_InputField _inputField;
         [SerializeField] private Button _resultButton;
+        private bool _isConfigured;
 
         public event Action ResultClicked;
         public event Action<string> InputChanged;
 
-        public string InputText => _inputField == null ? string.Empty : _inputField.text;
+        public string InputText => _isConfigured ? _inputField.text : string.Empty;
 
         private void Awake()
         {
-            if (_resultButton != null)
+            if (_inputField == null || _resultButton == null)
             {
-                _resultButton.onClick.AddListener(HandleResultClick);
+                Debug.LogError("CalculatorInputView: assign InputField and ResultButton in Inspector.");
+                enabled = false;
+                return;
             }
 
-            if (_inputField != null)
-            {
-                _inputField.onValueChanged.AddListener(HandleInputChanged);
-            }
+            _resultButton.onClick.AddListener(HandleResultClick);
+            _inputField.onValueChanged.AddListener(HandleInputChanged);
+            _isConfigured = true;
         }
 
         private void OnDestroy()
         {
-            if (_resultButton != null)
+            if (!_isConfigured)
             {
-                _resultButton.onClick.RemoveListener(HandleResultClick);
+                return;
             }
 
-            if (_inputField != null)
-            {
-                _inputField.onValueChanged.RemoveListener(HandleInputChanged);
-            }
+            _resultButton.onClick.RemoveListener(HandleResultClick);
+            _inputField.onValueChanged.RemoveListener(HandleInputChanged);
         }
 
         public void SetInputText(string value)
         {
-            if (_inputField == null)
+            if (!_isConfigured)
             {
                 return;
             }
@@ -53,18 +53,22 @@ namespace DevAndrew.Calculator.Presentation
 
         public void SetResultInteractable(bool isInteractable)
         {
-            if (_resultButton != null)
+            if (!_isConfigured)
             {
-                _resultButton.interactable = isInteractable;
+                return;
             }
+
+            _resultButton.interactable = isInteractable;
         }
 
         public void SetInputInteractable(bool isInteractable)
         {
-            if (_inputField != null)
+            if (!_isConfigured)
             {
-                _inputField.interactable = isInteractable;
+                return;
             }
+
+            _inputField.interactable = isInteractable;
         }
 
         private void HandleResultClick()
