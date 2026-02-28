@@ -16,7 +16,6 @@ namespace DevAndrew.Calculator.Core.Presenters
         private readonly IStateRepository _stateRepository;
 
         private CalculatorState _state;
-        private readonly List<string> _historyLines = new List<string>();
         private bool _dirty;
         private bool _isErrorDialogVisible;
 
@@ -123,19 +122,18 @@ namespace DevAndrew.Calculator.Core.Presenters
 
         private void RebuildHistoryOnView()
         {
-            _historyLines.Clear();
+            var historyLines = new List<string>(_state.History.Count);
             foreach (var entry in _state.History)
             {
-                _historyLines.Add(FormatHistoryEntry(entry));
+                historyLines.Add(FormatHistoryEntry(entry));
             }
 
-            _view.SetHistory(_historyLines);
+            _view.SetHistory(historyLines);
         }
 
         private void AppendHistoryOnView(HistoryEntry entry)
         {
             var line = FormatHistoryEntry(entry);
-            _historyLines.Add(line);
             _view.AppendHistoryLine(line);
         }
 
