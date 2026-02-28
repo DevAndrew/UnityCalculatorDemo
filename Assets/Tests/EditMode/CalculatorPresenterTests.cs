@@ -25,6 +25,40 @@ public class CalculatorPresenterTests
     }
 
     [Test]
+    public void ResultClicked_KeepsInput_WhenClearInputOptionIsDisabled()
+    {
+        var view = new FakeView();
+        var repository = new InMemoryRepository();
+        var errorHandler = new FakeErrorHandler();
+        var presenter = new CalculatorPresenter(view, repository, errorHandler, clearInputOnSuccess: false);
+
+        presenter.Initialize();
+        view.SetInputText("54+21");
+        view.EmitResultClick();
+
+        Assert.AreEqual("54+21", view.InputTextValue);
+        Assert.NotNull(repository.LastSavedState);
+        Assert.AreEqual("54+21", repository.LastSavedState.InputExpression);
+    }
+
+    [Test]
+    public void ResultClicked_ClearsInput_WhenClearInputOptionIsEnabled()
+    {
+        var view = new FakeView();
+        var repository = new InMemoryRepository();
+        var errorHandler = new FakeErrorHandler();
+        var presenter = new CalculatorPresenter(view, repository, errorHandler, clearInputOnSuccess: true);
+
+        presenter.Initialize();
+        view.SetInputText("54+21");
+        view.EmitResultClick();
+
+        Assert.AreEqual(string.Empty, view.InputTextValue);
+        Assert.NotNull(repository.LastSavedState);
+        Assert.AreEqual(string.Empty, repository.LastSavedState.InputExpression);
+    }
+
+    [Test]
     public void ResultClicked_ShowsErrorAndRestoresInput_ForInvalidExpression()
     {
         var view = new FakeView();

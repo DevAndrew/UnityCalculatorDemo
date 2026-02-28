@@ -13,6 +13,7 @@ namespace DevAndrew.Calculator.App
         [SerializeField] private CalculatorInputView _calculatorInputView;
         [SerializeField] private CalculatorHistoryView _calculatorHistoryView;
         [SerializeField] private MessageBoxView _messageBoxView;
+        [SerializeField] private bool _clearInputOnSuccess;
 
         private CalculatorPresenter _presenter;
         private ICalculatorView _calculatorView;
@@ -72,7 +73,8 @@ namespace DevAndrew.Calculator.App
             _presenter = new CalculatorPresenter(
                 _calculatorView,
                 stateRepository,
-                errorHandler);
+                errorHandler,
+                _clearInputOnSuccess);
 
             _presenter.Initialize();
             _isInitialized = true;

@@ -14,6 +14,7 @@ namespace DevAndrew.Calculator.Core.Presenters
         private readonly ICalculatorView _view;
         private readonly ICalculatorErrorHandler _errorHandler;
         private readonly IStateRepository _stateRepository;
+        private readonly bool _clearInputOnSuccess;
 
         private CalculatorState _state;
         private bool _dirty;
@@ -22,11 +23,13 @@ namespace DevAndrew.Calculator.Core.Presenters
         public CalculatorPresenter(
             ICalculatorView view,
             IStateRepository stateRepository,
-            ICalculatorErrorHandler errorHandler)
+            ICalculatorErrorHandler errorHandler,
+            bool clearInputOnSuccess = false)
         {
             _view = view;
             _stateRepository = stateRepository;
             _errorHandler = errorHandler;
+            _clearInputOnSuccess = clearInputOnSuccess;
         }
 
         public void Initialize()
@@ -75,6 +78,12 @@ namespace DevAndrew.Calculator.Core.Presenters
                 _state.AddHistoryEntry(entry);
                 _dirty = true;
                 AppendHistoryOnView(entry);
+
+                if (_clearInputOnSuccess)
+                {
+                    ClearInputOnViewAndState();
+                }
+
                 PersistIfNeeded();
                 return;
             }
@@ -153,6 +162,16 @@ namespace DevAndrew.Calculator.Core.Presenters
         {
             _view.SetInputInteractable(isInteractable);
             _view.SetResultInteractable(isInteractable);
+        }
+
+        private void ClearInputOnViewAndState()
+        {
+            if (_state != null && _state.TrySetInputExpression(string.Empty))
+            {
+                _dirty = true;
+            }
+
+            _view.SetInputText(string.Empty);
         }
     }
 }
