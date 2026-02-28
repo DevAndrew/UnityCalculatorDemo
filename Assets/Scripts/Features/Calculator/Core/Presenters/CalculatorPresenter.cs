@@ -17,7 +17,6 @@ namespace DevAndrew.Calculator.Core.Presenters
         private readonly bool _clearInputOnSuccess;
 
         private CalculatorState _state;
-        private bool _dirty;
         private bool _isErrorDialogVisible;
 
         public CalculatorPresenter(
@@ -39,7 +38,6 @@ namespace DevAndrew.Calculator.Core.Presenters
             RebuildHistoryOnView();
             _view.ResultClicked += OnResultClicked;
             _view.InputChanged += OnInputChanged;
-            _dirty = false;
         }
 
         public void Dispose()
@@ -51,15 +49,12 @@ namespace DevAndrew.Calculator.Core.Presenters
 
         public void PersistIfNeeded()
         {
-            if (_state == null || !_dirty)
+            if (_state == null)
             {
                 return;
             }
 
-            if (_stateRepository.TrySave(_state))
-            {
-                _dirty = false;
-            }
+            _stateRepository.TrySave(_state);
         }
 
         private void OnResultClicked()
@@ -76,21 +71,18 @@ namespace DevAndrew.Calculator.Core.Presenters
             {
                 var entry = HistoryEntry.Success(expressionAtClick, sum);
                 _state.AddHistoryEntry(entry);
-                _dirty = true;
                 AppendHistoryOnView(entry);
 
                 if (_clearInputOnSuccess)
                 {
                     ClearInputOnViewAndState();
                 }
-
                 PersistIfNeeded();
                 return;
             }
 
             var errorEntry = HistoryEntry.Error(expressionAtClick);
             _state.AddHistoryEntry(errorEntry);
-            _dirty = true;
             AppendHistoryOnView(errorEntry);
             PersistIfNeeded();
 
@@ -126,7 +118,6 @@ namespace DevAndrew.Calculator.Core.Presenters
             {
                 return;
             }
-            _dirty = true;
         }
 
         private void RebuildHistoryOnView()
@@ -166,10 +157,7 @@ namespace DevAndrew.Calculator.Core.Presenters
 
         private void ClearInputOnViewAndState()
         {
-            if (_state != null && _state.TrySetInputExpression(string.Empty))
-            {
-                _dirty = true;
-            }
+            _state?.TrySetInputExpression(string.Empty);
 
             _view.SetInputText(string.Empty);
         }
