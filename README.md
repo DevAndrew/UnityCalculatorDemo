@@ -37,7 +37,9 @@
 
 ### Presentation
 
-- `CalculatorScreenView` — Unity UI слой (input, кнопка Result, история, скролл).
+- `CalculatorInputView` — Unity UI слой ввода (input + кнопка Result).
+- `CalculatorHistoryView` — Unity UI слой истории (виртуализированный список).
+- `CalculatorScreenView` — объединяет input/history view в единый `ICalculatorView` для Presenter.
 - `MessageBoxView` + `MessageBoxService` — отображение диалога ошибки.
 - `AppBootstrapper` — композиция зависимостей и запуск приложения.
 
@@ -62,3 +64,7 @@
 Запуск:
 
 - через Unity Test Runner в режиме EditMode.
+
+## Virtualized history
+
+Для истории добавлен переиспользуемый вертикальный скроллер: `Assets/Scripts/Core/UI/VirtualizedList/VerticalScroller.cs`

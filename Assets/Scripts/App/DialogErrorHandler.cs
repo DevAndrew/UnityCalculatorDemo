@@ -2,7 +2,7 @@ using System;
 using DevAndrew.Calculator.Core.Interfaces;
 using DevAndrew.Dialogs.Contracts;
 
-namespace CalculatorDemoTask.App
+namespace DevAndrew.Calculator.App
 {
     public sealed class DialogErrorHandler : ICalculatorErrorHandler
     {

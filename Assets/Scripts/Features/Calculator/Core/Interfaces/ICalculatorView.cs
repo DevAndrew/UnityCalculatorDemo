@@ -14,6 +14,8 @@ namespace DevAndrew.Calculator.Core.Interfaces
 
         void SetHistory(IReadOnlyList<string> lines);
 
+        void AppendHistoryLine(string line);
+
         void SetResultInteractable(bool isInteractable);
 
         void SetInputInteractable(bool isInteractable);

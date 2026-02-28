@@ -16,6 +16,7 @@ namespace DevAndrew.Calculator.Core.Presenters
         private readonly IStateRepository _stateRepository;
 
         private CalculatorState _state;
+        private readonly List<string> _historyLines = new List<string>();
         private bool _dirty;
         private bool _isErrorDialogVisible;
 
@@ -33,7 +34,7 @@ namespace DevAndrew.Calculator.Core.Presenters
         {
             _state = _stateRepository.Load() ?? CalculatorState.CreateDefault();
             _view.SetInputText(_state.InputExpression);
-            RefreshHistoryOnView();
+            RebuildHistoryOnView();
             _view.ResultClicked += OnResultClicked;
             _view.InputChanged += OnInputChanged;
             _dirty = false;
@@ -71,16 +72,18 @@ namespace DevAndrew.Calculator.Core.Presenters
 
             if (ExpressionEvaluator.TryEvaluate(expressionAtClick, out var sum))
             {
-                _state.AddSuccessHistory(expressionAtClick, sum);
+                var entry = HistoryEntry.Success(expressionAtClick, sum);
+                _state.AddHistoryEntry(entry);
                 _dirty = true;
-                RefreshHistoryOnView();
+                AppendHistoryOnView(entry);
                 PersistIfNeeded();
                 return;
             }
 
-            _state.AddErrorHistory(expressionAtClick);
+            var errorEntry = HistoryEntry.Error(expressionAtClick);
+            _state.AddHistoryEntry(errorEntry);
             _dirty = true;
-            RefreshHistoryOnView();
+            AppendHistoryOnView(errorEntry);
             PersistIfNeeded();
 
             _isErrorDialogVisible = true;
@@ -118,15 +121,22 @@ namespace DevAndrew.Calculator.Core.Presenters
             _dirty = true;
         }
 
-        private void RefreshHistoryOnView()
+        private void RebuildHistoryOnView()
         {
-            var lines = new List<string>(_state.History.Count);
+            _historyLines.Clear();
             foreach (var entry in _state.History)
             {
-                lines.Add(FormatHistoryEntry(entry));
+                _historyLines.Add(FormatHistoryEntry(entry));
             }
 
-            _view.SetHistory(lines);
+            _view.SetHistory(_historyLines);
+        }
+
+        private void AppendHistoryOnView(HistoryEntry entry)
+        {
+            var line = FormatHistoryEntry(entry);
+            _historyLines.Add(line);
+            _view.AppendHistoryLine(line);
         }
 
         private static string FormatHistoryEntry(HistoryEntry entry)

@@ -1,10 +1,7 @@
 {
-  "name": "Calculator.Presentation",
-  "rootNamespace": "DevAndrew.Calculator.Presentation",
+  "name": "Core.UI.VirtualizedList",
+  "rootNamespace": "DevAndrew.Core.UI.VirtualizedList",
   "references": [
-    "Calculator.Core",
-    "Core.UI.VirtualizedList",
-    "Unity.TextMeshPro",
     "UnityEngine.UI"
   ],
   "includePlatforms": [],

@@ -782,7 +782,7 @@ GameObject:
   - component: {fileID: 3614630683092975174}
   - component: {fileID: 5505416542691433656}
   - component: {fileID: 7034031401252285853}
-  - component: {fileID: 8105815835484244038}
+  - component: {fileID: 7682232463262020580}
   m_Layer: 5
   m_Name: Canvas_Input
   m_TagString: Untagged
@@ -851,7 +851,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &8105815835484244038
+--- !u!114 &7682232463262020580
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -860,10 +860,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 8315763133869368341}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4707e5e119228442f89679e424ccc368, type: 3}
+  m_Script: {fileID: 11500000, guid: 3da50a41570064806ad51b7eb86ae63f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _inputField: {fileID: 940376846854016559}
   _resultButton: {fileID: 7081325758570116083}
-  _historyText: {fileID: 0}
-  _historyScrollRect: {fileID: 0}

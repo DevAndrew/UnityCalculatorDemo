@@ -1,6 +1,6 @@
 {
   "name": "App.Bootstrap",
-  "rootNamespace": "CalculatorDemoTask.App",
+  "rootNamespace": "DevAndrew.Calculator.App",
   "references": [
     "Calculator.Core",
     "Calculator.Presentation",

@@ -1,18 +1,21 @@
 using DevAndrew.Calculator.Core.Presenters;
+using DevAndrew.Calculator.Core.Interfaces;
 using DevAndrew.Calculator.Infrastructure;
 using DevAndrew.Calculator.Presentation;
 using DevAndrew.Dialogs.Presentation;
 using DevAndrew.SaveLoad.Infrastructure;
 using UnityEngine;
 
-namespace CalculatorDemoTask.App
+namespace DevAndrew.Calculator.App
 {
     public sealed class AppBootstrapper : MonoBehaviour
     {
-        [SerializeField] private CalculatorScreenView _calculatorScreenView;
+        [SerializeField] private CalculatorInputView _calculatorInputView;
+        [SerializeField] private CalculatorHistoryView _calculatorHistoryView;
         [SerializeField] private MessageBoxView _messageBoxView;
 
         private CalculatorPresenter _presenter;
+        private ICalculatorView _calculatorView;
         private bool _isInitialized;
 
         private void Start()
@@ -24,6 +27,7 @@ namespace CalculatorDemoTask.App
         {
             _presenter?.Dispose();
             _presenter = null;
+            _calculatorView = null;
             _isInitialized = false;
         }
 
@@ -47,9 +51,15 @@ namespace CalculatorDemoTask.App
                 return;
             }
 
-            if (_calculatorScreenView == null)
+            if (_calculatorInputView == null)
             {
-                Debug.LogError("AppBootstrapper: CalculatorScreenView reference is missing.");
+                Debug.LogError("AppBootstrapper: Calculator input view reference is missing.");
+                return;
+            }
+
+            if (_calculatorHistoryView == null)
+            {
+                Debug.LogError("AppBootstrapper: Calculator history view reference is missing.");
                 return;
             }
 
@@ -57,9 +67,10 @@ namespace CalculatorDemoTask.App
             var stateRepository = new FileStateRepository(saveLoadService);
             var messageBoxService = new MessageBoxService(_messageBoxView);
             var errorHandler = new DialogErrorHandler(messageBoxService);
+            _calculatorView = new CalculatorScreenView(_calculatorInputView, _calculatorHistoryView);
 
             _presenter = new CalculatorPresenter(
-                _calculatorScreenView,
+                _calculatorView,
                 stateRepository,
                 errorHandler);
 

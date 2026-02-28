@@ -131,6 +131,11 @@ public class CalculatorPresenterTests
             HistoryLines.AddRange(lines);
         }
 
+        public void AppendHistoryLine(string line)
+        {
+            HistoryLines.Add(line ?? string.Empty);
+        }
+
         public void SetResultInteractable(bool isInteractable)
         {
             ResultInteractableState = isInteractable;
