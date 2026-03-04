@@ -17,7 +17,7 @@
 - Введенное выражение и история сохраняются между сессиями приложения.
 - Опционально можно очищать поле ввода после успешного `Result`: флаг `Clear Input On Success` в `AppBootstrapper` (Inspector), по умолчанию выключен.
 
-## Соответствие ТЗ (кратко)
+## Соответствие ТЗ
 
 - **Clean Architecture + MVP**: доменная логика отделена от UI, экран работает через Presenter.
 - **Модульность через assembly**: проект разбит на отдельные `asmdef` (Core, Infrastructure, Presentation, Dialogs, SaveLoad и тесты).
